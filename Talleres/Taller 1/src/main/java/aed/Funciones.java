@@ -67,7 +67,9 @@ class Funciones {
         int suma = 0;
         for (int n:numeros){
             suma = suma + n;
+            
         }
+        
         return suma;
     }
 

@@ -76,34 +76,34 @@ class FuncionesTest {
 
     @Test
     void testSumatoria() {
-        assertEquals(0, funciones.sumatoria(new int[]{}));
-        assertEquals(15, funciones.sumatoria(new int[]{0,1,2,3,4,5}));
-        assertEquals(10, funciones.sumatoria(new int[]{2,3,5}));
-        assertEquals(-8, funciones.sumatoria(new int[]{5, -25, 4, 8}));
+        assertEquals(0, funciones.sumatoria(new int[] {}));
+        assertEquals(15, funciones.sumatoria(new int[] { 0, 1, 2, 3, 4, 5 }));
+        assertEquals(10, funciones.sumatoria(new int[] { 2, 3, 5 }));
+        assertEquals(-8, funciones.sumatoria(new int[] { 5, -25, 4, 8 }));
     }
 
     @Test
     void testBusqueda() {
-        assertEquals(0, funciones.busqueda(new int[]{1, 2, 3}, 1));
-        assertEquals(2, funciones.busqueda(new int[]{10, 11, 15, 24}, 15));
-        assertEquals(3, funciones.busqueda(new int[]{10, 11, 15, 24}, 24));
+        assertEquals(0, funciones.busqueda(new int[] { 1, 2, 3 }, 1));
+        assertEquals(2, funciones.busqueda(new int[] { 10, 11, 15, 24 }, 15));
+        assertEquals(3, funciones.busqueda(new int[] { 10, 11, 15, 24 }, 24));
     }
 
     @Test
     void testTienePrimo() {
-        assertFalse(funciones.tienePrimo(new int[]{1,4,6,15}));
-        assertTrue(funciones.tienePrimo(new int[]{7,4,6,15}));
-        assertTrue(funciones.tienePrimo(new int[]{1,4,7,15}));
-        assertTrue(funciones.tienePrimo(new int[]{1,4,6,7}));
-        assertTrue(funciones.tienePrimo(new int[]{2, 5, 11}));
+        assertFalse(funciones.tienePrimo(new int[] { 1, 4, 6, 15 }));
+        assertTrue(funciones.tienePrimo(new int[] { 7, 4, 6, 15 }));
+        assertTrue(funciones.tienePrimo(new int[] { 1, 4, 7, 15 }));
+        assertTrue(funciones.tienePrimo(new int[] { 1, 4, 6, 7 }));
+        assertTrue(funciones.tienePrimo(new int[] { 2, 5, 11 }));
     }
 
     @Test
     void testTodosPares() {
-        assertTrue(funciones.todosPares(new int[]{6, 2, 14, 20}));
-        assertFalse(funciones.todosPares(new int[]{3, 2, 14, 20}));
-        assertFalse(funciones.todosPares(new int[]{6, 3, 14, 20}));
-        assertFalse(funciones.todosPares(new int[]{6, 2, 14, 7}));
+        assertTrue(funciones.todosPares(new int[] { 6, 2, 14, 20 }));
+        assertFalse(funciones.todosPares(new int[] { 3, 2, 14, 20 }));
+        assertFalse(funciones.todosPares(new int[] { 6, 3, 14, 20 }));
+        assertFalse(funciones.todosPares(new int[] { 6, 2, 14, 7 }));
     }
 
     @Test
