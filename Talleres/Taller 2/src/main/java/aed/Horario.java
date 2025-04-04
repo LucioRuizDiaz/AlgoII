@@ -5,35 +5,34 @@ public class Horario {
     private int minutos;
 
     public Horario(int h, int m) {
-        hora = h;
-        minutos = m;
+        this.hora = h;
+        this.minutos = m;
     }
 
     public int hora() {
-        int devolverHora = hora;
-        return devolverHora;
+        return hora;
     }
 
     public int minutos() {
-        int devolverMinutos = minutos;
-        return devolverMinutos;
+        return minutos;
     }
 
     @Override
     public String toString() {
-        return hora + ":" + minutos ;
+        return hora + ":" + minutos;
     }
 
     @Override
     public boolean equals(Object otro) {
         boolean otroEsNull = (otro == null);
         boolean claseDistinta = otro.getClass() != this.getClass();
-        
-        if(otroEsNull || claseDistinta) return false;
 
-        else{
+        if (otroEsNull || claseDistinta)
+            return false;
+
+        else {
             Horario otroHorario = (Horario) otro;
-            return hora == otroHorario.hora() && minutos == otroHorario.minutos();
+            return this.hora() == otroHorario.hora() && this.minutos == otroHorario.minutos();
         }
     }
 

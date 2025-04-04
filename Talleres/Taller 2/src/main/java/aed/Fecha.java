@@ -5,54 +5,49 @@ public class Fecha {
     private int mes;
 
     public Fecha(int d, int m) {
-        dia = d;
-        mes = m;
+        this.dia = d;
+        this.mes = m;
     }
 
     public Fecha(Fecha fecha) {
-
+        this(fecha.dia(), fecha.mes());
     }
 
     public Integer dia() {
-        int devolverDia = dia;
-        return devolverDia;
+        return dia;
     }
 
     public Integer mes() {
-        int  devolverMes = mes;
-        return devolverMes;
+        return mes;
     }
 
-    
     @Override
     public String toString() {
         return dia + "/" + mes;
     }
 
-    
-
-
     @Override
     public boolean equals(Object otra) {
         boolean otroEsNull = (otra == null);
         boolean claseDistinta = otra.getClass() != this.getClass();
-        
-        if(otroEsNull || claseDistinta) return false;
 
-        else{
+        if (otroEsNull || claseDistinta)
+            return false;
+
+        else {
             Fecha otraFecha = (Fecha) otra;
-            return dia == otraFecha.dia() && mes == otraFecha.mes();
+            return this.dia() == otraFecha.dia() && this.mes() == otraFecha.mes();
         }
     }
 
     public void incrementarDia() {
-        if (dia == diasEnMes(mes)){
+        if (dia == diasEnMes(mes)) {
             dia = 1;
-            if (mes == 12) mes = 1;
+            if (mes == 12)
+                mes = 1;
             else
-            mes += 1;
-        }
-        else{
+                mes += 1;
+        } else {
             dia += 1;
         }
     }
