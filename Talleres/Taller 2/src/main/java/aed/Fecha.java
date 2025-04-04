@@ -1,7 +1,7 @@
 package aed;
 
 public class Fecha {
-    
+
     private int dia;
     private int mes;
 
@@ -12,6 +12,7 @@ public class Fecha {
 
     public Fecha(Fecha fecha) {
         this(fecha.dia(), fecha.mes());
+
     }
 
     public Integer dia() {

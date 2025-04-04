@@ -6,8 +6,7 @@ public class Recordatorio {
     private String mensaje;
 
     public Recordatorio(String m, Fecha f, Horario h) {
-        fecha = f;
-        this.fecha = new Fecha(fecha);
+        this.fecha = new Fecha(f);
         this.horario = h;
         this.mensaje = m;
     }
