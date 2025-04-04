@@ -40,8 +40,7 @@ public class Recordatorio {
 
         else {
             Recordatorio otroRecordatorio = (Recordatorio) otro;
-
-            boolean mismoMensaje = this.mensaje.equals(otroRecordatorio.mensaje());
+            boolean mismoMensaje = this.mensaje() == otroRecordatorio.mensaje();
             boolean mismoHorario = this.horario.equals(otroRecordatorio.horario());
             boolean mismaFecha = this.fecha.equals(otroRecordatorio.fecha());
             return mismoMensaje && mismoHorario && mismaFecha;

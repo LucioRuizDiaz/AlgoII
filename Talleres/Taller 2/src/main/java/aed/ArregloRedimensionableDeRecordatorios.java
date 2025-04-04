@@ -51,16 +51,12 @@ class ArregloRedimensionableDeRecordatorios {
     }
 
     public ArregloRedimensionableDeRecordatorios(ArregloRedimensionableDeRecordatorios vector) {
-        Recordatorio[] nueva_lista = new Recordatorio[vector.longitud()];
-        for (int i = 0; i < vector.longitud(); i++) {
-            nueva_lista[i] = vector.obtener(i);
-        }
-        this.listaRecordatorios = nueva_lista.clone();
+
+        this.listaRecordatorios = vector.listaRecordatorios.clone();
 
     }
 
     public ArregloRedimensionableDeRecordatorios copiar() {
-
         ArregloRedimensionableDeRecordatorios copia = new ArregloRedimensionableDeRecordatorios(this);
         return copia;
     }
