@@ -1,9 +1,4 @@
 # Algo II
-Talleres y TPs resueltos del 1c2025 de Algoritmos y Estructuras de Datos /  Algoritmos y Estructuras de Datos II
-
-- Talleres
-  - [Taller 1](https://github.com/LucioRuizDiaz/AlgoII/tree/main/Talleres/Taller%201)
-  - [Taller 2](https://github.com/LucioRuizDiaz/AlgoII/tree/main/Talleres/Taller%202)
  
 ## Talleres
 
