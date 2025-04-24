@@ -13,4 +13,4 @@
 </p>
 
 > [!CAUTION]
-> Este repo tiene ejercicios que hice mientras cursaba en el primer cuatri de 2025. No prometo que todo esté bien, ni que sea la forma más eficiente de resolverlos, ni que sigan al pie de la letra la versión actual de la materia. Si te sirve, genial. Pero usalo con criterio y revisá todo por tu cuenta. Suerte! 🙂 
+> Este repo tiene ejercicios y los parciales que hice mientras cursaba en el primer cuatri de 2025. No prometo que todo esté bien, ni que sea la forma más eficiente de resolverlos, ni que sigan al pie de la letra la versión actual de la materia. Si te sirve, genial. Pero usalo con criterio y revisá todo por tu cuenta. Suerte! 🙂 
