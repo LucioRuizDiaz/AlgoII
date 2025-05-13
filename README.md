@@ -11,10 +11,10 @@
 
 
 ## Trabajos Practicos
-|        Trabajo Practico                                                       |                  Nombre                                               |
-|-------------------------------------------------------------------------------|-----------------------------------------------------------------------|
-| [TP 1](https://github.com/LucioRuizDiaz/AlgoII/tree/main/TP1)                 | Especificación de TADs                                                |
-| [TP 2][PROXIMAMENTE]                                                          | Diseño e implementación de estructuras                                |
+|        Trabajo Practico                                                                            |                  Nombre                                               |
+|----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| [TP 1](https://github.com/LucioRuizDiaz/AlgoII/tree/main/Trabajos%20Practicos/TP1)                 | Especificación de TADs                                                |
+| [TP 2][PROXIMAMENTE]                                                                               | Diseño e implementación de estructuras                                |
 
 
 <p align="center">
