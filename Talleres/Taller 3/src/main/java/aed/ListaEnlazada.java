@@ -126,7 +126,6 @@ public class ListaEnlazada<T> implements Secuencia<T> {
         }
 
         public T anterior() {
-            int i = dedito;
             dedito--;
             return obtener(dedito);
         }
