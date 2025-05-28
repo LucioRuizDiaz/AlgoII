@@ -133,19 +133,59 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     }
 
     public String toString() {
-        throw new UnsupportedOperationException("No implementada aun");
+        String toString = "{";
+        Iterador<T> iterador = this.iterador();
+        while (iterador.haySiguiente()) {
+            toString += iterador.siguiente();
+            if (iterador.haySiguiente()) {
+                toString += ",";
+            }
+        }
+        toString += "}";
+        return toString;
     }
 
     private class ABB_Iterador implements Iterador<T> {
         private Nodo actual;
 
+        ABB_Iterador() {
+            actual = nodoMinimo();
+        }
+
+        public Nodo nodoMinimo() {
+            return nodoMinimoRecursivo(raiz);
+        }
+
+        private Nodo nodoMinimoRecursivo(Nodo actual) {
+            if (actual == null)
+                return null;
+            return actual.izquierdo == null ? actual : nodoMinimoRecursivo(actual.izquierdo);
+        }
+
         public boolean haySiguiente() {
-            throw new UnsupportedOperationException("No implementada aun");
+            return actual != null;
         }
 
         public T siguiente() {
-            throw new UnsupportedOperationException("No implementada aun");
+            T valor = actual.valor;
+            if (actual.derecho != null) {
+                actual = nodoMinimoRecursivo(actual.derecho);
+            } else {
+                actual = noTieneDerecho(actual);
+
+            }
+            return valor;
         }
+
+    }
+
+    private Nodo noTieneDerecho(Nodo actual) {
+        Nodo padre = actual.padre;
+        while (padre != null && actual == padre.derecho) {
+            actual = padre;
+            padre = padre.padre;
+        }
+        return padre;
     }
 
     public Iterador<T> iterador() {

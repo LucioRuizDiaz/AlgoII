@@ -283,11 +283,21 @@ class ABBTests {
 
         Iterador<Integer> iterador = conjunto.iterador();
         assertEquals(4, iterador.siguiente());
+        System.out.println("entro a 4");
         assertEquals(5, iterador.siguiente());
+        System.out.println("entro a 5");
         assertEquals(12, iterador.siguiente());
+        System.out.println("entro a 12");
+
         assertEquals(15, iterador.siguiente());
+        System.out.println("entro a 15");
+
         assertEquals(16, iterador.siguiente());
+        System.out.println("entro a 16");
+
         assertEquals(20, iterador.siguiente());
+        System.out.println("entro a 20");
+
         assertEquals(22, iterador.siguiente());
         assertEquals(24, iterador.siguiente());
         assertEquals(25, iterador.siguiente());
@@ -324,7 +334,6 @@ class ABBTests {
         c.eliminar(5);
         c.eliminar(7);
         assertEquals("{4,6,8}", c.toString());
-
     }
 
     Integer NCLAVES = 1000;
