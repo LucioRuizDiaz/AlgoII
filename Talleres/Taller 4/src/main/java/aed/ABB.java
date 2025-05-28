@@ -14,9 +14,13 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
         T valor;
         Nodo derecho;
         Nodo izquierdo;
+        Nodo padre;
 
         Nodo(T v) {
             valor = v;
+            izquierdo = null;
+            derecho = null;
+            padre = null;
         }
 
         private int cantidadDeDescendientes() {
@@ -36,105 +40,96 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     }
 
     public T minimo() {
-        throw new UnsupportedOperationException("No implementada aun");
+        return minimoRecursivo(raiz);
+    }
+
+    private T minimoRecursivo(Nodo actual) {
+        return actual.izquierdo == null ? actual.valor : minimoRecursivo(actual.izquierdo);
     }
 
     public T maximo() {
-        throw new UnsupportedOperationException("No implementada aun");
+        return maximoRecursivo(raiz);
+    }
+
+    private T maximoRecursivo(Nodo actual) {
+        return actual.derecho == null ? actual.valor : maximoRecursivo(actual.derecho);
     }
 
     public void insertar(T elem) {
-        Nodo hoja = new Nodo(elem);
         if (raiz == null) {
-            raiz = hoja;
+            raiz = new Nodo(elem);
         } else {
-            if (pertenece(elem)) {
-                int comparacion = elem.compareTo(raiz.valor);
-                if (comparacion == 0) {
-                    raiz = hoja;
+            insertarRecu(raiz, elem);
+        }
+    }
+
+    private void insertarRecu(Nodo actual, T elem) {
+        int comparacion = elem.compareTo(actual.valor);
+        if (!pertenece(elem))
+            if (comparacion < 0) {
+                if (actual.izquierdo == null) {
+                    actual.izquierdo = new Nodo(elem);
+                    actual.izquierdo.padre = actual;
                 } else {
-                    if (comparacion > 0) {
-                        if (raiz.derecho == null) {
-                            raiz.derecho = hoja;
-                        } else {
-                            insertar(elem);
-                        }
-                    } else {
-                        if (raiz.izquierdo == null) {
-                            raiz.izquierdo = hoja;
-                        } else {
-                            insertar(elem);
-                        }
-                    }
+                    insertarRecu(actual.izquierdo, elem);
                 }
             } else {
-                int comparacion = elem.compareTo(raiz.valor);
-                if (comparacion == 0) {
-                    raiz = hoja;
+                if (actual.derecho == null) {
+                    actual.derecho = new Nodo(elem);
+                    actual.derecho.padre = actual;
                 } else {
-                    if (comparacion > 0) {
-                        if (raiz.derecho == null) {
-                            raiz.derecho = hoja;
-                        } else {
-                            insertar(elem);
-
-                        }
-                    } else {
-                        if (raiz.izquierdo == null) {
-                            raiz.izquierdo = hoja;
-                        } else {
-                            raiz = raiz.izquierdo;
-                            insertar(elem);
-
-                        }
-                    }
+                    insertarRecu(actual.derecho, elem);
                 }
             }
-        }
-
     }
 
-    /*
-     * public void insertarIter(Nodo actual, T elem) {
-     * int comparacion = elem.compareTo(actual.valor);
-     * if (comparacion == 0) {
-     * 
-     * }
-     * if (comparacion > 0) {
-     * actual = actual.derecho;
-     * insertar(elem);
-     * } else {
-     * actual = actual.izquierdo;
-     * insertar(elem);
-     * }
-     * }
-     */
     public boolean pertenece(T elem) {
-        Nodo actual = raiz;
-        return perteneceIter(actual, elem);
+        return perteneceRecu(raiz, elem);
     }
 
-    private boolean perteneceIter(Nodo actual, T elem) {
+    private boolean perteneceRecu(Nodo actual, T elem) {
         if (actual == null) {
             return false;
-        }
-        int comparacion = elem.compareTo(raiz.valor);
-        if (comparacion == 0) {
-            return true;
         } else {
-            if (comparacion > 0) {
-                actual = actual.derecho;
-                return perteneceIter(actual, elem);
-            } else {
-                actual = actual.izquierdo;
-                return perteneceIter(actual, elem);
+            int comparacion = elem.compareTo(actual.valor);
+            if (comparacion == 0) {
+                return true;
             }
-
+            if (comparacion > 0)
+                return perteneceRecu(actual.derecho, elem);
+            else
+                return perteneceRecu(actual.izquierdo, elem);
         }
     }
 
     public void eliminar(T elem) {
-        throw new UnsupportedOperationException("No implementada aun");
+        raiz = eliminarRecu(raiz, elem);
+    }
+
+    private Nodo eliminarRecu(Nodo actual, T elem) {
+        if (actual == null)
+            return null;
+        int comparacion = elem.compareTo(actual.valor);
+        if (comparacion == 0) {
+            if (actual.izquierdo == null) {
+                return actual.derecho;
+            } else if (actual.derecho == null) {
+                return actual.izquierdo;
+            }
+            actual.valor = minimoRecursivo(actual.derecho); // busca el minimo del subarbol derecho
+            actual.derecho = eliminarRecu(actual.derecho, actual.valor); // lo elimina del arbol despues de copiarlo
+                                                                         // para que no este repetido
+        } else {
+            if (comparacion < 0) {
+                actual.izquierdo = eliminarRecu(actual.izquierdo, elem);
+            } else {
+                actual.derecho = eliminarRecu(actual.derecho, elem);
+            }
+
+        }
+
+        return actual;
+
     }
 
     public String toString() {
