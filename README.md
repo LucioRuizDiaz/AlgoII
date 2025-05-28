@@ -7,6 +7,8 @@
 | [Taller 1](https://github.com/LucioRuizDiaz/AlgoII/tree/main/Talleres/Taller%201) | Introducción a la programación imperativa en java                     | Java     |
 | [Taller 2](https://github.com/LucioRuizDiaz/AlgoII/tree/main/Talleres/Taller%202) | Agenda                                                                | Java     |
 | [Taller 3](https://github.com/LucioRuizDiaz/AlgoII/tree/main/Talleres/Taller%203) | Lista doblemente enlazada                                             | Java     |
+| [Taller 4](https://github.com/LucioRuizDiaz/AlgoII/tree/main/Talleres/Taller%204) | Implementaci´on de conjunto con ABB                                   | Java     |
+
 
 
 
