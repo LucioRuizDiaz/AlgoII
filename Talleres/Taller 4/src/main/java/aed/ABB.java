@@ -111,19 +111,28 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
             return null;
         int comparacion = elem.compareTo(actual.valor);
         if (comparacion == 0) {
+            // 0 o 1 hijos
             if (actual.izquierdo == null) {
                 return actual.derecho;
             } else if (actual.derecho == null) {
                 return actual.izquierdo;
+            } else { // 2 hijos
+                T sucesor = minimoRecursivo(actual.derecho);
+                actual.valor = sucesor; // busca el minimo del subarbol derecho
+                actual.derecho = eliminarRecu(actual.derecho, sucesor); // lo elimina del arbol despues de copiarlo
+                                                                        // para que no este repetido
+
             }
-            actual.valor = minimoRecursivo(actual.derecho); // busca el minimo del subarbol derecho
-            actual.derecho = eliminarRecu(actual.derecho, actual.valor); // lo elimina del arbol despues de copiarlo
-                                                                         // para que no este repetido
         } else {
             if (comparacion < 0) {
                 actual.izquierdo = eliminarRecu(actual.izquierdo, elem);
+
             } else {
                 actual.derecho = eliminarRecu(actual.derecho, elem);
+                if (actual.derecho != null) {
+                    actual.derecho.padre = actual; // esto me ayuda para que no se me cuelgue en c.eliminar(7)
+                }
+
             }
 
         }
