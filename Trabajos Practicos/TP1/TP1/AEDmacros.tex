@@ -13,6 +13,27 @@
 	\setlength{\parindent}{0em}%
 }
 
+
+%TADs
+\newcommand{\tadheader}[2]{
+{\normalfont\bfseries\ttfamily\noindent TAD}%
+\ %
+{\normalfont\ttfamily #1}%
+\ifthenelse{\equal{#2}{}}{}{%
+{$\langle$#2$\rangle$}%
+}%
+}
+\newenvironment{tad}[2]{
+\tadheader{#1}{#2}
+    \{%
+    \begin{IndentedBlock}
+}{
+    \end{IndentedBlock}
+    \}%
+}
+
+
+
 % Especificacion de procs
 
 \newcommand{\In}{\textsf{in }}
@@ -60,6 +81,7 @@
 		\ifthenelse{\equal{##2}{}}{}{\ (##2)}\ : ##3\, = \ensuremath{##4}%
 		{\normalfont\bfseries\,;\par}%
 	}
+
 	\renewcommand{\pred}[3]{%
 		{\normalfont\bfseries\ttfamily pred }%
 		{\normalfont\ttfamily ##1}%
@@ -92,6 +114,17 @@
 	{\normalfont\bfseries\,;\par}%
 }
 
+%obs
+\newcommand{\obs}[2]{%
+	{\normalfont\bfseries\ttfamily\noindent obs\ }%
+	{\normalfont\ttfamily #1} : {\normalfont\ttfamily #2}%
+	{\normalfont\bfseries\,\par}%
+}
+
+%struct
+\newcommand{\tstruct}[1]{\ensuremath{\mathsf{Struct}\langle#1\rangle}}
+
+
 \newcommand{\pred}[3]{%
 	{\normalfont\bfseries\ttfamily\noindent pred }%
 	{\normalfont\ttfamily #1}%
@@ -120,7 +153,9 @@
 \newcommand{\Then}{\ensuremath{\rightarrow}}
 \newcommand{\Iff}{\ensuremath{\leftrightarrow}}
 \newcommand{\implica}{\ensuremath{\longrightarrow}}
-\newcommand{\IfThenElse}[3]{\ensuremath{\mathsf{if}\ #1\ \mathsf{then}\ #2\ \mathsf{else}\ #3\ \mathsf{fi}}}
+\newcommand{\IfThenElse}[3]{%
+\mathrm{IfThenElse}(#1, #2, #3)%
+}
 \newcommand{\yLuego}{\land _L}
 \newcommand{\oLuego}{\lor _L}
 \newcommand{\implicaLuego}{\implica _L}
@@ -177,3 +212,4 @@
 	frame=l, framesep=3pt,
 	captionpos=b,
 }
+

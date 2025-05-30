@@ -1,0 +1,141 @@
+\documentclass[10pt,a4paper]{article}
+
+\input{AEDmacros}
+\setlength{\parskip}{1em}
+
+\usepackage{caratula} % Version modificada para usar las macros de algo1 de ~> https://github.com/bcardiff/dc-tex
+
+
+\titulo{Especificación de TADs}
+\subtitulo{\$Berretacoin}
+
+\fecha{\today}
+
+\materia{Algoritmos y Estructuras de Datos / Algoritmos y Estructuras de Datos II}
+\grupo{LVJM03}
+
+
+\integrante{Cattanio, Mateo}{1244/23}{mateocattanio@gmail.com}
+\integrante{Cellerino, Juan Bautista}{697/22}{jcellerino@gmail.com}
+\integrante{Ruiz Díaz González, Lucio Tadeo}{162/24}
+{luciotadeo02@gmail.com}
+\integrante{Villanueva, Valentin}{1925/21}{valentincordoba00@gmail.com}
+% Pongan cuantos integrantes quieran
+
+% Declaramos donde van a estar las figuras
+% No es obligatorio, pero suele ser comodo
+\graphicspath{{../static/}}
+
+\begin{document}
+
+\maketitle
+
+
+
+\newpage
+
+\begin{tad}{\$Berretacoin}{}
+
+
+\obs{cadena}{\TLista{  \tstruct{idBloque: \ent , bloque: \TLista{ \tstruct{transaccion:\ent, comprador:\ent, vendedor:\ent, monto:\ent}}}  }}
+
+
+\pred{esTransaccionValida}{t: \tstruct{transaccion:\ent, comprador:\ent, vendedor:\ent, monto:\ent}}{(t.transaccion \geq 0) \land  (t.comprador \geq 0) \land (t.vendedor > 0) \land (t.comprador \neq t.vendedor) \land (t.monto > 0)}
+
+\pred{esTransaccionCreacion}
+{b: \$Berretacoin, t: \tstruct{transaccion:\ent, comprador:\ent, vendedor:\ent, monto:\ent}}
+{(t.transaccion \geq 0) \land (t.comprador = 0)
+\land \paraTodo[unalinea]{i}{\ent}{0 \leq i <|b| \yLuego b[i].bloque[0].vendedor \neq t.vendedor} 
+\land (t.monto = 1)}
+
+\pred{transaccionesOrdenadas}{ts: \TLista{ \tstruct{transaccion:\ent, comprador:\ent, vendedor:\ent, monto:\ent}}}{
+    \paraTodo[unalinea]{i}{\ent}{0 \leq i <|ts|-1 \implicaLuego ts[i].transaccion < ts[i+1].transaccion}}
+    
+
+
+\pred{esUsuario}{m : \ent}{\paraTodo[unalinea]{i}{\ent}{0 \leq i <|b.cadena| \implicaLuego \paraTodo[unalinea]{j}{\ent} {0 \leq j < |b.cadena[i].bloque|\implicaLuego  ((m = b.cadena[i].bloque[j].vendedor) \lor (m = b.cadena[i].bloque[j].comprador))     } }}
+
+\pred{sinRepetidos}{s: \TLista{\ent}}{
+    \paraTodo[unalinea]{i}{\ent}{0 \leq i < |s| \implicaLuego \paraTodo[unalinea]{j}{\ent}{ 0 \leq j < |s| \land j \neq i \implicaLuego s[j] \neq s[i] }}
+}
+
+\pred{cotizo}{l: \TLista{\ent}, b: \$Berretacoin,  res: \TLista{\ent}}{
+\paraTodo[unalinea]{i}{\ent}{0\leq i < |l| \implicaLuego res[i] = l[i] * sumaBloque(b.cadena[i].bloque)}
+}
+
+\pred{esPromedio}{b: \$Berretacoin, res: \float}{
+res = \frac{\sum\limits_{i = 0}^{|b.cadena| - 1}(\sum\limits_{j = 1}^{|b.cadena[i].bloque|-1} b.cadena[i].bloque[j].monto)}{|b.cadena|}
+
+}
+%% Definir bien structs
+
+
+\begin{aux}{SaldoUsuario}{\In b : \$Berretacoin, \In u : \ent}{\ent}
+{ \\ \paraTodo[unalinea]{i}{\ent}{0 \leq i <|b.cadena| \implicaLuego \\ 
+res = ({\sum\limits_{j=0}^{|b.cadena[i].bloque| - 1} IfThenElse(u = b.cadena[i].bloque[j].vendedor, b.cadena[i].bloque[j].valor, 0)}) - \\(  {\sum\limits_{j=0}^{|b.cadena[i].bloque| - 1} IfThenElse(u = b.cadena[i].bloque[j].comprador, b.cadena[i].bloque[j].valor, 0)}) } }} 
+
+\end{aux}
+
+\begin{aux}{sumaBloque}{\In bloque: \TLista{\Tstruct{transacciones: \ent, comprador: \ent , vendedor: \ent , monto : \ent }}}{\ent}{
+\\ res ={ \sum\limits_{i = 0}^{|bloque| - 1} bloque[i].monto  }
+}
+    
+\end{aux}
+
+\newpage
+\begin{proc}{creacion}{}{\$Berretacoin}
+    \requiere{True}
+	\asegura{res.cadena = \lvacia}
+
+    
+\end{proc}
+
+
+\begin{proc}{agregarBloque}{\Inout b : \$Berretacoin, \In s : \TLista{\tstruct {transaccion: \ent, comprador:\ent, vendedor: \ent, monto: \ent }}}
+
+
+    \requiere{ b = B_0}
+
+    
+    \requiere{|s| \leq 50 }
+    
+    
+    \requiere{transaccionesOrdenadas(s)}
+
+    \requiere{\paraTodo[unalinea]{i}{\ent}{0<i<|s| \implicaLuego esTransaccionValida(s[i])}}
+    
+    \requiere{(|B_0.cadena| \leq 3000 \land esTransaccionCreacion(B_0,s[0])) \\ \lor (|B_0.cadena| > 3000 \land esTransaccionValida(s[0])) }
+
+    
+    \asegura{b.cadena = B_0.cadena ++ {<(|B_0.cadena|, s)}>}
+    
+    
+    
+\end{proc}
+
+
+\begin{proc}{maximosTenedores}{\In b : \$Berretacoin}{\TLista{\ent}}
+    \requiere{True}
+	\asegura{k \in res \iff (esUsuario(m) \implicaLuego SaldoUsuario(b, k) \geq SaldoUsuario(b, m))}
+    \asegura{sinRepetidos(res)}
+\end{proc}
+
+
+
+
+\begin{proc}{montoMedio}{\In b : \$Berretacoin}{\float}
+    \requiere{True}
+    
+    \asegura{(|b| = 0 \land res = 0)
+    \lor (|b| > 0 \land esPromedio(b, res))}
+\end{proc}
+
+
+\begin{proc}{cotizaciónAPesos}{\In l : \TLista{\ent}, \In b : \$Berretacoin}{\TLista{\ent}}
+    \requiere{|l| = |b.cadena|}
+    \requiere{\paraTodo[unalinea]{i}{\ent}{0\leq i < |l| \implicaLuego 0 < l[i]}}
+    \asegura{(|res| = |l|) \yLuego (cotizo(l, b, res)) }
+\end{proc}
+
+\end{tad}
+\end{document}
