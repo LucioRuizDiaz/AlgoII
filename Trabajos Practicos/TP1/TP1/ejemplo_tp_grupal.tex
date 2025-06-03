@@ -67,19 +67,23 @@
 res = \frac{\sum\limits_{i = 0}^{|b.cadena| - 1}(\sum\limits_{j = 1}^{|b.cadena[i].bloque|-1} b.cadena[i].bloque[j].monto)}{|b.cadena|}
 
 }
-%% Definir bien structs
-
-
-\begin{aux}{SaldoUsuario}{\In b : \$Berretacoin, \In u : \ent}{\ent}
-{ \\ \paraTodo[unalinea]{i}{\ent}{0 \leq i <|b.cadena| \implicaLuego \\ 
-res = ({\sum\limits_{j=0}^{|b.cadena[i].bloque| - 1} IfThenElse(u = b.cadena[i].bloque[j].vendedor, b.cadena[i].bloque[j].valor, 0)}) - \\(  {\sum\limits_{j=0}^{|b.cadena[i].bloque| - 1} IfThenElse(u = b.cadena[i].bloque[j].comprador, b.cadena[i].bloque[j].valor, 0)}) } }} 
-
-\end{aux}
+\pred{saldoValido}{b: \$Berretacoin, s: \TLista{\Tstruct{transacciones: \ent, comprador: \ent , vendedor: \ent , monto : \ent }}, t: \tstruct{transaccion:\ent, comprador:\ent, vendedor:\ent, monto:\ent}}{
+t.monto \leq saldoUsuario(b, t.comprador) + saldoHastaTransaccion(s, t, t.comprador)}
 
 \begin{aux}{sumaBloque}{\In bloque: \TLista{\Tstruct{transacciones: \ent, comprador: \ent , vendedor: \ent , monto : \ent }}}{\ent}{
 \\ res ={ \sum\limits_{i = 0}^{|bloque| - 1} bloque[i].monto  }
 }
-    
+
+%% Definir bien structs
+
+
+\begin{aux}{SaldoUsuario}{\In b : \$Berretacoin, \In u : \ent}{\ent}
+{ \\ \paraTodo[unalinea]{i}{\ent}{0 \leq i <|b.cadena| \implicaLuego \\
+res = ({\sum\limits_{j=0}^{|b.cadena[i].bloque| - 1} IfThenElse(u = b.cadena[i].bloque[j].vendedor, b.cadena[i].bloque[j].valor, 0)}) - \\(  {\sum\limits_{j=0}^{|b.cadena[i].bloque| - 1} IfThenElse(u = b.cadena[i].bloque[j].comprador, b.cadena[i].bloque[j].valor, 0)}) } }}
+
+\begin{aux}{SaldoHastaTransaccion}{\In s: \TLista{\Tstruct{transacciones: \ent, comprador: \ent , vendedor: \ent , monto : \ent }}, t: \tstruct{transaccion:\ent, comprador:\ent, vendedor:\ent, monto:\ent}, u: \ent}{\ent}
+{ \\ \paraTodo[unalinea]{i}{\ent}{0 \leq i <t.transaccion \implicaLuego
+res = ({\sum\limits_{j=0}^{t.transaccion - 1} IfThenElse(u = s[j].vendedor, s[j].monto, 0)}) - \\(  {\sum\limits_{j=0}^{t.transaccion - 1} IfThenElse(u = s[j].comprador, s[j].monto, 0)}) } }}     
 \end{aux}
 
 \newpage
@@ -102,7 +106,7 @@ res = ({\sum\limits_{j=0}^{|b.cadena[i].bloque| - 1} IfThenElse(u = b.cadena[i].
     
     \requiere{transaccionesOrdenadas(s)}
 
-    \requiere{\paraTodo[unalinea]{i}{\ent}{0<i<|s| \implicaLuego esTransaccionValida(s[i])}}
+    \requiere{\paraTodo[unalinea]{i}{\ent}{0<i<|s| \implicaLuego esTransaccionValida(s[i]) \land saldoValido(b, s, s[i]}}
     
     \requiere{(|B_0.cadena| \leq 3000 \land esTransaccionCreacion(B_0,s[0])) \\ \lor (|B_0.cadena| > 3000 \land esTransaccionValida(s[0])) }
 
@@ -116,7 +120,7 @@ res = ({\sum\limits_{j=0}^{|b.cadena[i].bloque| - 1} IfThenElse(u = b.cadena[i].
 
 \begin{proc}{maximosTenedores}{\In b : \$Berretacoin}{\TLista{\ent}}
     \requiere{True}
-	\asegura{k \in res \iff (esUsuario(m) \implicaLuego SaldoUsuario(b, k) \geq SaldoUsuario(b, m))}
+	\asegura{ \paraTodo[unalinea]{k,m} {\ent} {esUsuario(m) \land  esUsuario(k) \implicaLuego k \in res \iff (SaldoUsuario(b, k) \geq SaldoUsuario(b, m))}}
     \asegura{sinRepetidos(res)}
 \end{proc}
 
