@@ -1,32 +1,34 @@
 package aed;
 
 public class Berretacoin {
+    private heapArray<Integer> ListaUsuarios;
+    private heapArray<Transaccion> ListaTransacciones;
 
-    public Berretacoin(int n_usuarios){
+    public Berretacoin(int n_usuarios) {
+        this.ListaUsuarios = new heapArray<>(n_usuarios);
+    }
+
+    public void agregarBloque(Transaccion[] transacciones) {
         throw new UnsupportedOperationException("Implementar!");
     }
 
-    public void agregarBloque(Transaccion[] transacciones){
+    public Transaccion txMayorValorUltimoBloque() {
         throw new UnsupportedOperationException("Implementar!");
     }
 
-    public Transaccion txMayorValorUltimoBloque(){
+    public Transaccion[] txUltimoBloque() {
         throw new UnsupportedOperationException("Implementar!");
     }
 
-    public Transaccion[] txUltimoBloque(){
+    public int maximoTenedor() {
         throw new UnsupportedOperationException("Implementar!");
     }
 
-    public int maximoTenedor(){
+    public int montoMedioUltimoBloque() {
         throw new UnsupportedOperationException("Implementar!");
     }
 
-    public int montoMedioUltimoBloque(){
-        throw new UnsupportedOperationException("Implementar!");
-    }
-
-    public void hackearTx(){
+    public void hackearTx() {
         throw new UnsupportedOperationException("Implementar!");
     }
 }

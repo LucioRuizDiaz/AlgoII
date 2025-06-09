@@ -1,0 +1,77 @@
+transaccion ES Struct<id, comprador, vendedor, monto>;
+bloque ES seq<transaccion>;
+SaldosUsuarios ES int;
+id_usuarios ES int;
+
+
+clases:
+    LISTA ENLAZADA GENERICA la usamos para cadena de bloques y el bloque es una lista de transacciones 
+    VECTOR USUARIOS implementa la lista con los saldos de usuario y que cada indice es el id de usuario(-1)
+    HEAP generico para implementar los heaps de SaldosUsuarios y Transacciones ademas tiene un handle implementado adentro
+    
+Modulo $Berretacoin implements $Berretacoin <
+
+    var cadena : L.E. <bloque>;
+    var usuarios : Vector <SaldosUsuarios>;
+    var heapSaldoUsuarios : ColaPrioridadLog<SaldosUsuarios>; + handle
+    var sumaUltimoBloque : int;
+    
+    1) nuevoBerretacoin(in n_usuarios : int) : $Berretacoin <               //O(P)
+        $Berretacoin.cadena = new L.E.<bloque>;
+        $Berretacoin.usuarios = new Vector<SaldosUsuarios>;
+        int i = 1;
+        while (i <= n_usuarios){
+            usuarios.agregarAtras(0);
+            i++;
+        }
+        //armamos el heap de SaldosUsuarios con colaDePriodidadDesdeSecuencia (O(P))
+        //
+        return $Berretacoin;
+    >
+    
+    2) agregarBloque(inout berretacoin : $Berretacoin, in transacciones : seq<Transaccion>)<            //O(n * log(P))
+        int sumaTransacciones = 0;
+        L.E. ListaTransacciones = new L.E.<transaccion>;
+        int i = 0;
+        while(i<transacciones.longitud();){                                                            //O(n)
+            sumaTransacciones += transacciones[i].monto;  
+            ListaTransacciones.agregarAtras(transacciones[i])
+        }
+        $Berretacoin.cadena.agregarAtras(ListaTransacciones);
+        $Berretacoin.sumaUltimoBloque = sumaTransacciones;
+        //heapyficamos la lista para tener ordenadas por monto las transacciones de arriba a abajo con el handle correspondiente que va recorriendo tambien por indice de usuario
+        
+        
+    >
+    
+    3) txMayorValorUltimoBloque(in berretacoin : $Berretacoin) : Transaccion<                           //O(1)
+        //accedemos a la raiz de nuestro heap de transacciones
+    >
+    
+    4) txUltimoBloque(in berretacoin : $Berretacoin) : seq<Transaccion><                                //O(n)
+        ultimoBloque = berretacoin.cadena.ultimo();
+        L.E. lista = new L.E.<transaccion>;
+        int i = 0;
+        while (i < ultimoBloque.longitud()){
+            lista.agregarAtras(ultimoBloque[i]);
+        }
+        return lista;
+    >
+    
+    5) maximoTenedor(in berretacoin : $Berretacoin) : int <                                              //O(1)
+        //accedemos al valor del handle de la raiz de nuestro heap saldoUsuarios   
+    
+    >
+    
+    6)montoMedioUltimoBloque(in berretacoin : $Berretacoin) : int<                                      //O(1)
+        ultimoBloque = berretacoin.cadena.ultimo();
+        int longitud = ultimoBloque.longitud();
+        int promedio = 0;
+        if(longitud != 0){
+            promedio = sumaUltimoBloque / longitud;
+            }
+        return promedio;
+    >
+    
+    7)hackearTx<
+    // 
