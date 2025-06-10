@@ -64,8 +64,11 @@ public class Berretacoin {
         return maximoTenedor.getId();
     }
 
-    public int montoMedioUltimoBloque() {
-        return montoMedioUltimoBloque / ListaTransacciones.cantidadElementos();
+    public double montoMedioUltimoBloque() {
+        int transaccionesSinCreacion = ListaTransacciones.cantidadElementos() - 1;
+
+        return transaccionesSinCreacion == 0 ? 0
+                : montoMedioUltimoBloque / transaccionesSinCreacion;
     }
 
     public void hackearTx() {

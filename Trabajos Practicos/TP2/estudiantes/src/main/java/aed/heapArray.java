@@ -119,6 +119,20 @@ public class heapArray<T extends Comparable<T>> {
         T cambiarT = heap[i];
         heap[i] = heap[j];
         heap[j] = cambiarT;
+
+        /*
+         * int cambiarHandle = handles[i];====}
+         * handles[i] = handles[j];===========} esto estaba mal
+         * handles[j] = cambiarHandle;========}
+         */
+        // Actualizar handles: el elemento que estaba en posición i ahora está en j, y
+        // viceversa
+        handles[ids[i]] = j;
+        handles[ids[j]] = i;
+        int cambiarids = ids[i];
+        ids[i] = ids[j];
+        ids[j] = cambiarids;
+
     }
 
     private void heapifyUp() {
