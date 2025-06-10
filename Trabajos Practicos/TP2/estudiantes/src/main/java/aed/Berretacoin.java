@@ -4,17 +4,20 @@ package aed;
 //n = cantidad de transacciones
 
 public class Berretacoin {
-    private heapArray<Usuario> ListaUsuarios;
+    private Usuario[] listaUsuarios;
+    private heapArray<Usuario> heapUsuarios;
     private heapArray<Transaccion> ListaTransacciones;
-    private Transaccion mayorTransaccion;
     private int montoMedioUltimoBloque;
     private ListaEnlazada<Transaccion[]> cadena;
 
     public Berretacoin(int n_usuarios) { // O(P)
         this.cadena = new ListaEnlazada<Transaccion[]>();
-        this.ListaUsuarios = new heapArray<>(n_usuarios);
+        this.heapUsuarios = new heapArray<>(n_usuarios);
+        this.listaUsuarios = new Usuario[n_usuarios];
         for (int i = 0; i < n_usuarios; i++) {
-            ListaUsuarios.insertar(new Usuario(i + 1, 0));
+            Usuario usuario = new Usuario(i + 1, 0);
+            heapUsuarios.insertarHandle(i, usuario);
+            listaUsuarios[i] = usuario;
         }
     }
 
@@ -22,10 +25,25 @@ public class Berretacoin {
         this.ListaTransacciones = new heapArray<>(transacciones.length);
         this.montoMedioUltimoBloque = 0;
         for (Transaccion tx : transacciones) {
-            montoMedioUltimoBloque += tx.monto();
             ListaTransacciones.insertar(tx);
-            ListaUsuarios.actualizar(tx.id_comprador(), -(tx.monto()));
-            ListaUsuarios.actualizar(tx.id_vendedor(), tx.monto());
+            int comprador = tx.id_comprador();
+            int vendedor = tx.id_vendedor();
+
+            if (comprador != 0) {
+                montoMedioUltimoBloque += tx.monto();
+                int saldoAnterior = listaUsuarios[comprador - 1].getSaldo();
+                int nuevoSaldo = saldoAnterior - tx.monto();
+                Usuario compradorActualizado = new Usuario(comprador, nuevoSaldo);
+                heapUsuarios.actualizar(comprador - 1, compradorActualizado);
+                listaUsuarios[comprador - 1] = compradorActualizado;
+            }
+
+            // vendedor
+            int saldoAnterior = listaUsuarios[vendedor - 1].getSaldo();
+            int nuevoSaldo = saldoAnterior + tx.monto();
+            Usuario vendedorActualizado = new Usuario(vendedor, nuevoSaldo);
+            heapUsuarios.actualizar(vendedor - 1, vendedorActualizado);
+            listaUsuarios[vendedor - 1] = vendedorActualizado;
 
         }
         cadena.agregarAtras(transacciones);
@@ -42,7 +60,7 @@ public class Berretacoin {
     }
 
     public int maximoTenedor() { // O(1)
-        Usuario maximoTenedor = ListaUsuarios.obtener(0);
+        Usuario maximoTenedor = heapUsuarios.obtener(0);
         return maximoTenedor.getId();
     }
 

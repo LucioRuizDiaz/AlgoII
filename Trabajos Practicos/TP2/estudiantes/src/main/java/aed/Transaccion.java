@@ -36,7 +36,11 @@ public class Transaccion implements Comparable<Transaccion> {
 
     @Override
     public boolean equals(Object otro) {
-        throw new UnsupportedOperationException("Implementar!");
+        Transaccion otroTransaccion = (Transaccion) otro;
+        return this.id == otroTransaccion.id &&
+                this.id_comprador == otroTransaccion.id_comprador &&
+                this.id_vendedor == otroTransaccion.id_vendedor &&
+                this.monto == otroTransaccion.monto;
     }
 
     public int monto() {

@@ -104,7 +104,7 @@ public class BerretacoinTests {
     @Test
     public void unSoloUsuario() {
         Berretacoin sistema = new Berretacoin(1);
-        // assertEquals(1, sistema.maximoTenedor());
+        assertEquals(1, sistema.maximoTenedor());
 
         Transaccion[] bloque = { new Transaccion(0, 0, 1, 1) };
         sistema.agregarBloque(bloque);
