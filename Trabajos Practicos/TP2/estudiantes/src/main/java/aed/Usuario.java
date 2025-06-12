@@ -18,7 +18,7 @@ public class Usuario implements Comparable<Usuario> {
     }
 
     public void actualizarSaldo(int monto) {
-        this.saldo += monto;
+        saldo = monto;
     }
 
     @Override

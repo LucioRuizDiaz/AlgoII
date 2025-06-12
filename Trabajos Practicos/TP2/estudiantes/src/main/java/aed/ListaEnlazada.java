@@ -89,6 +89,14 @@ public class ListaEnlazada<T> implements Secuencia<T> {
         return ultimo.valor;
     }
 
+    public void cambiarUltimo(T nuevoValor) {
+        if (ultimo != null) {
+            ultimo.valor = nuevoValor;
+        } else {
+            agregarAtras(nuevoValor);
+        }
+    }
+
     public ListaEnlazada(ListaEnlazada<T> lista) {
         Nodo actual = lista.cabeza;
         while (actual != null) {

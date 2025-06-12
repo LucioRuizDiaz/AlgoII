@@ -47,6 +47,10 @@ public class Transaccion implements Comparable<Transaccion> {
         return monto;
     }
 
+    public int ID() {
+        return id;
+    }
+
     public int id_comprador() {
         return id_comprador;
     }

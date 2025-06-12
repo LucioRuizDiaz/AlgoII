@@ -2,8 +2,8 @@ package aed;
 
 public class heapArray<T extends Comparable<T>> {
     private T[] heap;
-    private int[] handles; // handles[id] = posición en el heap del elemento con ese id
     private int[] ids; // ids[pos] = id del elemento en esa posición del heap
+    private int[] handles; // handles[id] = posición en el heap del elemento con ese id
     private int capacidad;
     private int tamaño;
 
@@ -59,60 +59,61 @@ public class heapArray<T extends Comparable<T>> {
         return tamaño;
     }
 
+    public int capacidad() {
+        return capacidad;
+    }
+
     public void actualizar(int id, T nuevoValor) {
         int posicion = handles[id];
-        T valorPrevio = heap[posicion];
         heap[posicion] = nuevoValor;
-        if (nuevoValor.compareTo(valorPrevio) > 0) {
-            heapifyUpDesde(posicion);
-        } else if (nuevoValor.compareTo(valorPrevio) < 0) {
-            heapifyDownDesde(posicion);
-        }
+        heapifyUpDesde(posicion);
+        heapifyDownDesde(posicion);
 
     }
 
-    private void aumentarCapacidad() {
-        int nuevaCapacidad = capacidad * 2;
-        T[] nuevoHeap = (T[]) new Comparable[nuevaCapacidad];
-        int[] nuevosHandles = new int[nuevaCapacidad];
-        int[] nuevosIds = new int[nuevaCapacidad];
-
-        for (int i = 0; i < tamaño; i++) {
-            nuevoHeap[i] = heap[i];
-            nuevosHandles[i] = handles[i];
-            nuevosIds[i] = ids[i];
-        }
-        heap = nuevoHeap;
-        handles = nuevosHandles;
-        ids = nuevosIds;
-        capacidad = nuevaCapacidad;
-    }
+    // NO ES NECESARIO AUMENTAR CAPACIDAD
+    /*
+     * private void aumentarCapacidad() {
+     * int nuevaCapacidad = capacidad * 2;
+     * T[] nuevoHeap = (T[]) new Comparable[nuevaCapacidad];
+     * int[] nuevosHandles = new int[nuevaCapacidad];
+     * int[] nuevosIds = new int[nuevaCapacidad];
+     * 
+     * for (int i = 0; i < tamaño; i++) {
+     * nuevoHeap[i] = heap[i];
+     * nuevosHandles[i] = handles[i];
+     * nuevosIds[i] = ids[i];
+     * }
+     * heap = nuevoHeap;
+     * handles = nuevosHandles;
+     * ids = nuevosIds;
+     * capacidad = nuevaCapacidad;
+     * }
+     * 
+     */
 
     public void insertarHandle(int id, T valor) {
-        if (capacidad == tamaño) {
-            aumentarCapacidad();
-        }
         heap[tamaño] = valor;
         handles[id] = tamaño;
         ids[tamaño] = id;
         tamaño++;
-        heapifyUp();
+        siftUp();
     }
 
     public void insertar(T valor) {
-        if (capacidad == tamaño) {
-            aumentarCapacidad();
-        }
         heap[tamaño] = valor;
         tamaño++;
-        heapifyUp();
-
+        siftUp();
     }
 
-    public void eliminarMaximo() {
-        heap[0] = heap[tamaño - 1];
+    public T eliminarMaximo() {
+        T maximo = heap[0];
         tamaño--;
-        heapifyDown();
+        if (tamaño > 0) {
+            heap[0] = heap[tamaño];
+            siftDown();
+        }
+        return maximo;
     }
 
     private void cambiar(int i, int j) {
@@ -127,15 +128,16 @@ public class heapArray<T extends Comparable<T>> {
          */
         // Actualizar handles: el elemento que estaba en posición i ahora está en j, y
         // viceversa
+
         handles[ids[i]] = j;
         handles[ids[j]] = i;
+
         int cambiarids = ids[i];
         ids[i] = ids[j];
         ids[j] = cambiarids;
-
     }
 
-    private void heapifyUp() {
+    private void siftUp() {
         int index = this.tamaño - 1;
         while (index > 0 && (padre(index).compareTo(heap[index]) < 0)) {
             cambiar(index, indexPadre(index));
@@ -143,7 +145,7 @@ public class heapArray<T extends Comparable<T>> {
         }
     }
 
-    private void heapifyDown() {
+    private void siftDown() {
         int index = 0;
         while (tieneHijoIzquierdo(index)) {
             int indexHijoMayor = indexHijoIzquierdo(index);
@@ -154,8 +156,8 @@ public class heapArray<T extends Comparable<T>> {
             if (heap[index].compareTo(heap[indexHijoMayor]) < 0) {
                 cambiar(index, indexHijoMayor);
             }
-            index = indexHijoMayor;
 
+            index = indexHijoMayor;
         }
     }
 
