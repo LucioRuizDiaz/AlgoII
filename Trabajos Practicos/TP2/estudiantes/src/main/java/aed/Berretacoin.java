@@ -25,7 +25,6 @@ public class Berretacoin {
         this.heapTransacciones = new heapArray<>(transacciones.length);
         this.montoMedioUltimoBloque = 0;
         for (Transaccion tx : transacciones) {
-
             heapTransacciones.insertarHandle(tx.ID(), tx);
             int comprador = tx.id_comprador();
             int vendedor = tx.id_vendedor();
@@ -61,22 +60,26 @@ public class Berretacoin {
     public Transaccion[] txUltimoBloque() { // O(n)
         heapArray<Transaccion> ultimo = cadena.ultimo();
         Transaccion[] ultimaOrdenadaSinHack = new Transaccion[ultimo.capacidad()];
-        Transaccion[] ultimaOrdenadaHack = new Transaccion[ultimo.cantidadElementos()];
+        // Transaccion[] ultimaOrdenadaHack = new
+        // Transaccion[ultimo.cantidadElementos()];
         for (int i = 0; i < ultimaOrdenadaSinHack.length; i++) {
             int idTransaccion = ultimo.obtener(i).ID();
             ultimaOrdenadaSinHack[idTransaccion] = ultimo.obtener(i);
         }
-        int j = 0;
-        if (ultimo.cantidadElementos() < ultimo.capacidad()) {
-            for (int i = 0; i < ultimaOrdenadaSinHack.length; i++) {
-                if (ultimaOrdenadaSinHack[i] != null) {
-                    ultimaOrdenadaHack[j] = ultimaOrdenadaSinHack[i];
-                    j++;
-                }
-            }
-        }
-
-        return ultimo.cantidadElementos() < ultimo.capacidad() ? ultimaOrdenadaHack : ultimaOrdenadaSinHack;
+        /*
+         * int j = 0;
+         * if (ultimo.cantidadElementos() < ultimo.capacidad()) {
+         * for (int i = 0; i < ultimaOrdenadaSinHack.length; i++) {
+         * if (ultimaOrdenadaSinHack[i] != null) {
+         * ultimaOrdenadaHack[j] = ultimaOrdenadaSinHack[i];
+         * j++;
+         * }
+         * }
+         * }
+         */
+        // return ultimo.cantidadElementos() < ultimo.capacidad() ? ultimaOrdenadaHack :
+        // ultimaOrdenadaSinHack;
+        return ultimaOrdenadaSinHack;
     }
 
     public int maximoTenedor() { // O(1)
@@ -86,7 +89,6 @@ public class Berretacoin {
 
     public double montoMedioUltimoBloque() {// O(1)
         int transaccionesSinCreacion = heapTransacciones.cantidadElementos() - 1;
-
         return transaccionesSinCreacion == 0 ? 0
                 : montoMedioUltimoBloque / transaccionesSinCreacion;
     }
