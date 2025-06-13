@@ -71,27 +71,6 @@ public class heapArray<T extends Comparable<T>> {
 
     }
 
-    // NO ES NECESARIO AUMENTAR CAPACIDAD
-    /*
-     * private void aumentarCapacidad() {
-     * int nuevaCapacidad = capacidad * 2;
-     * T[] nuevoHeap = (T[]) new Comparable[nuevaCapacidad];
-     * int[] nuevosHandles = new int[nuevaCapacidad];
-     * int[] nuevosIds = new int[nuevaCapacidad];
-     * 
-     * for (int i = 0; i < tamaño; i++) {
-     * nuevoHeap[i] = heap[i];
-     * nuevosHandles[i] = handles[i];
-     * nuevosIds[i] = ids[i];
-     * }
-     * heap = nuevoHeap;
-     * handles = nuevosHandles;
-     * ids = nuevosIds;
-     * capacidad = nuevaCapacidad;
-     * }
-     * 
-     */
-
     public void insertarHandle(int id, T valor) {
         heap[tamaño] = valor;
         handles[id] = tamaño;
@@ -100,19 +79,25 @@ public class heapArray<T extends Comparable<T>> {
         siftUp();
     }
 
-    public void insertar(T valor) {
-        heap[tamaño] = valor;
-        tamaño++;
-        siftUp();
+    public int[] devolverHandles() {
+        return handles;
     }
 
     public T eliminarMaximo() {
         T maximo = heap[0];
-        tamaño--;
+        int idMaximo = ids[0];
+
         if (tamaño > 0) {
+            tamaño--;
             heap[0] = heap[tamaño];
+            ids[0] = ids[tamaño];
+            handles[ids[0]] = 0;
+            heap[tamaño] = null;
+            ids[tamaño] = -1;
+            handles[idMaximo] = -1;
             siftDown();
         }
+
         return maximo;
     }
 
@@ -155,9 +140,12 @@ public class heapArray<T extends Comparable<T>> {
 
             if (heap[index].compareTo(heap[indexHijoMayor]) < 0) {
                 cambiar(index, indexHijoMayor);
+                index = indexHijoMayor;
+
+            } else {
+                break;
             }
 
-            index = indexHijoMayor;
         }
     }
 
