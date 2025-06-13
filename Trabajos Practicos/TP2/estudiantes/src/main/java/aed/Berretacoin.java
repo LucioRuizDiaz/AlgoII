@@ -8,7 +8,8 @@ public class Berretacoin {
     private Usuario[] listaUsuarios;
     private heapArray<Usuario> heapUsuarios;
     private heapArray<Transaccion> heapTransacciones;
-    private int montoMedioUltimoBloque;
+    private int montoTotalUltimoBloque;
+    private int cantidadTransacciones;
 
     public Berretacoin(int n_usuarios) { // O(P)
         this.cadena = new ListaEnlazada<heapArray<Transaccion>>();
@@ -23,7 +24,8 @@ public class Berretacoin {
 
     public void agregarBloque(Transaccion[] transacciones) { // O(n * log(P))
         this.heapTransacciones = new heapArray<>(transacciones.length);
-        this.montoMedioUltimoBloque = 0;
+        this.montoTotalUltimoBloque = 0;
+        this.cantidadTransacciones = 0;
         int i = 0;
         for (Transaccion tx : transacciones) {
             heapTransacciones.insertarHandle(i, tx);
@@ -32,7 +34,9 @@ public class Berretacoin {
             int monto = tx.monto();
 
             if (comprador != 0) {
-                montoMedioUltimoBloque += monto;
+                montoTotalUltimoBloque += monto;
+                cantidadTransacciones += 1;
+
                 int saldoAnterior = listaUsuarios[comprador - 1].getSaldo();
                 int nuevoSaldo = saldoAnterior - monto;
                 Usuario compradorActualizado = listaUsuarios[comprador - 1];
@@ -63,11 +67,14 @@ public class Berretacoin {
         heapArray<Transaccion> ultimo = cadena.ultimo();
         Transaccion[] ultimaOrdenada = new Transaccion[ultimo.cantidadElementos()];
         int[] handles = ultimo.devolverHandles();
-        int j = 0;
-        for (int i = 0; i < handles.length; i++) {
-            if (handles[i] != -1) {
-                ultimaOrdenada[j] = ultimo.obtener(handles[i]);
-                j++;
+
+        if (ultimo.cantidadElementos() > 0) {
+            int j = 0;
+            for (int i = 0; i < handles.length; i++) {
+                if (handles[i] != -1) {
+                    ultimaOrdenada[j] = ultimo.obtener(handles[i]);
+                    j++;
+                }
             }
         }
         return ultimaOrdenada;
@@ -79,9 +86,8 @@ public class Berretacoin {
     }
 
     public double montoMedioUltimoBloque() {// O(1)
-        int transaccionesSinCreacion = heapTransacciones.cantidadElementos() - 1;
-        return transaccionesSinCreacion == 0 ? 0
-                : montoMedioUltimoBloque / transaccionesSinCreacion;
+        return cantidadTransacciones == 0 ? 0
+                : montoTotalUltimoBloque / cantidadTransacciones;
     }
 
     public void hackearTx() {// O(log n + logP )
@@ -93,7 +99,8 @@ public class Berretacoin {
 
         // devolverle la plata al comprador
         if (compradorHackeado != 0) {
-            montoMedioUltimoBloque -= montoHackeado;
+            montoTotalUltimoBloque -= montoHackeado;
+            cantidadTransacciones -= 1;
             int saldoAnterior = listaUsuarios[compradorHackeado - 1].getSaldo();
             int nuevoSaldo = saldoAnterior + montoHackeado;
             Usuario compradorActualizado = listaUsuarios[compradorHackeado - 1];

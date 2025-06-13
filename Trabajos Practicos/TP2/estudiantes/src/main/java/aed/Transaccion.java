@@ -22,8 +22,12 @@ public class Transaccion implements Comparable<Transaccion> {
             if (this.monto == otro.monto) {
                 if (this.id > otro.id) {
                     comparacion = 1;
-                } else {
+                }
+                if (this.id < otro.id) {
                     comparacion = -1;
+                }
+                if (this.id == otro.id) {
+                    comparacion = 0;
                 }
             } else {
                 if (this.monto < otro.monto) {

@@ -89,13 +89,20 @@ public class heapArray<T extends Comparable<T>> {
 
         if (tamaño > 0) {
             tamaño--;
-            heap[0] = heap[tamaño];
-            ids[0] = ids[tamaño];
-            handles[ids[0]] = 0;
-            heap[tamaño] = null;
-            ids[tamaño] = -1;
-            handles[idMaximo] = -1;
-            siftDown();
+            if (tamaño == 0) {
+                heap = (T[]) new Comparable[0];
+
+            } else {
+                heap[0] = heap[tamaño];
+                ids[0] = ids[tamaño];
+                handles[ids[0]] = 0;
+                heap[tamaño] = null;
+                ids[tamaño] = -1;
+                handles[idMaximo] = -1;
+                siftDown();
+
+            }
+
         }
 
         return maximo;
