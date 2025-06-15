@@ -58,8 +58,8 @@ public class heapArray<T extends Comparable<T>> {
     public void actualizar(int id, T nuevoValor) {
         int posicion = handles[id];
         heap[posicion] = nuevoValor;
-        heapifyUpDesde(posicion);
-        heapifyDownDesde(posicion);
+        siftUpDesde(posicion);
+        siftDownDesde(posicion);
 
     }
 
@@ -110,8 +110,6 @@ public class heapArray<T extends Comparable<T>> {
          * handles[i] = handles[j];===========} esto estaba mal
          * handles[j] = cambiarHandle;========}
          */
-        // Actualizar handles: el elemento que estaba en posición i ahora está en j, y
-        // viceversa
 
         handles[ids[i]] = j;
         handles[ids[j]] = i;
@@ -148,14 +146,14 @@ public class heapArray<T extends Comparable<T>> {
         }
     }
 
-    private void heapifyUpDesde(int index) {
+    private void siftUpDesde(int index) {
         while (index > 0 && padre(index).compareTo(heap[index]) < 0) {
             cambiar(index, indexPadre(index));
             index = indexPadre(index);
         }
     }
 
-    private void heapifyDownDesde(int index) {
+    private void siftDownDesde(int index) {
         while (tieneHijoIzquierdo(index)) {
             int indexHijoMayor = indexHijoIzquierdo(index);
 

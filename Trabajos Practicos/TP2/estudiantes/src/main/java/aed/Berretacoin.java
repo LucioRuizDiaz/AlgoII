@@ -96,7 +96,7 @@ public class Berretacoin {
 
     }
 
-    public void actualizarSaldos(int usuario, int monto) {// O(logP)
+    private void actualizarSaldos(int usuario, int monto) {// O(logP)
         int saldoAnterior = listaUsuarios[usuario - 1].getSaldo();
         int nuevoSaldo = saldoAnterior + monto;
         Usuario usuarioActualizado = listaUsuarios[usuario - 1];
