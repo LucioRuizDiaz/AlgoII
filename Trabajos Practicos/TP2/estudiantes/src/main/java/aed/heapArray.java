@@ -35,10 +35,6 @@ public class heapArray<T extends Comparable<T>> {
         return indexHijoDerecho(i) < tamaño;
     }
 
-    private boolean tienePadre(int i) {
-        return indexPadre(i) >= 0;
-    }
-
     private T hijoIzquierdo(int i) {
         return heap[indexHijoIzquierdo(i)];
     }
@@ -57,10 +53,6 @@ public class heapArray<T extends Comparable<T>> {
 
     public int cantidadElementos() {
         return tamaño;
-    }
-
-    public int capacidad() {
-        return capacidad;
     }
 
     public void actualizar(int id, T nuevoValor) {

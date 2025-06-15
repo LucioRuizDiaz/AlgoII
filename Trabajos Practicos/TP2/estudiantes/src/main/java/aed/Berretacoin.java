@@ -15,7 +15,7 @@ public class Berretacoin {
         this.cadena = new ListaEnlazada<heapArray<Transaccion>>();
         this.heapUsuarios = new heapArray<>(n_usuarios);
         this.listaUsuarios = new Usuario[n_usuarios];
-        for (int i = 0; i < n_usuarios; i++) {
+        for (int i = 0; i < n_usuarios; i++) { // O(P)
             Usuario usuario = new Usuario(i + 1, 0);
             heapUsuarios.insertarHandle(i, usuario);
             listaUsuarios[i] = usuario;
@@ -27,7 +27,7 @@ public class Berretacoin {
         this.montoTotalUltimoBloque = 0;
         this.cantidadTransacciones = 0;
         int i = 0;
-        for (Transaccion tx : transacciones) {
+        for (Transaccion tx : transacciones) { // O(n)
             heapTransacciones.insertarHandle(i, tx);
             int comprador = tx.id_comprador();
             int vendedor = tx.id_vendedor();
@@ -37,25 +37,13 @@ public class Berretacoin {
                 montoTotalUltimoBloque += monto;
                 cantidadTransacciones += 1;
 
-                int saldoAnterior = listaUsuarios[comprador - 1].getSaldo();
-                int nuevoSaldo = saldoAnterior - monto;
-                Usuario compradorActualizado = listaUsuarios[comprador - 1];
-                compradorActualizado.actualizarSaldo(nuevoSaldo);
-                heapUsuarios.actualizar(comprador - 1, compradorActualizado);
-                listaUsuarios[comprador - 1] = compradorActualizado;
+                actualizarSaldos(comprador, -monto); // O(log P)
             }
-
             // vendedor
-            int saldoAnterior = listaUsuarios[vendedor - 1].getSaldo();
-            int nuevoSaldo = saldoAnterior + monto;
-            Usuario vendedorActualizado = listaUsuarios[vendedor - 1];
-            vendedorActualizado.actualizarSaldo(nuevoSaldo);
-            heapUsuarios.actualizar(vendedor - 1, vendedorActualizado);
-            listaUsuarios[vendedor - 1] = vendedorActualizado;
-
+            actualizarSaldos(vendedor, monto); // O(log P)
             i++;
         }
-        cadena.agregarAtras(heapTransacciones);
+        cadena.agregarAtras(heapTransacciones); // O(1)
 
     }
 
@@ -68,10 +56,10 @@ public class Berretacoin {
         Transaccion[] ultimaOrdenada = new Transaccion[ultimo.cantidadElementos()];
         int[] handles = ultimo.devolverHandles();
 
-        if (ultimo.cantidadElementos() > 0) {
+        if (ultimo.cantidadElementos() > 0) {// si el heap esta vacio deja el array vacio
             int j = 0;
-            for (int i = 0; i < handles.length; i++) {
-                if (handles[i] != -1) {
+            for (int i = 0; i < handles.length; i++) { // O(n)
+                if (handles[i] != -1) {// solo entra si el handle es valido
                     ultimaOrdenada[j] = ultimo.obtener(handles[i]);
                     j++;
                 }
@@ -91,7 +79,7 @@ public class Berretacoin {
     }
 
     public void hackearTx() {// O(log n + logP )
-        Transaccion txMaxima = heapTransacciones.eliminarMaximo();
+        Transaccion txMaxima = heapTransacciones.eliminarMaximo(); // O(log n)
 
         int compradorHackeado = txMaxima.id_comprador();
         int vendedorHackeado = txMaxima.id_vendedor();
@@ -101,21 +89,20 @@ public class Berretacoin {
         if (compradorHackeado != 0) {
             montoTotalUltimoBloque -= montoHackeado;
             cantidadTransacciones -= 1;
-            int saldoAnterior = listaUsuarios[compradorHackeado - 1].getSaldo();
-            int nuevoSaldo = saldoAnterior + montoHackeado;
-            Usuario compradorActualizado = listaUsuarios[compradorHackeado - 1];
-            compradorActualizado.actualizarSaldo(nuevoSaldo);
-            heapUsuarios.actualizar(compradorHackeado - 1, compradorActualizado);
-            listaUsuarios[compradorHackeado - 1] = compradorActualizado;
+            actualizarSaldos(compradorHackeado, montoHackeado); // O(logP)
+
         }
-
         // sacarle la plata al vendedor
-        int saldoAnterior = listaUsuarios[vendedorHackeado - 1].getSaldo();
-        int nuevoSaldo = saldoAnterior - montoHackeado;
-        Usuario vendedorActualizado = listaUsuarios[vendedorHackeado - 1];
-        vendedorActualizado.actualizarSaldo(nuevoSaldo);
-        heapUsuarios.actualizar(vendedorHackeado - 1, vendedorActualizado);
-        listaUsuarios[vendedorHackeado - 1] = vendedorActualizado;
+        actualizarSaldos(vendedorHackeado, -montoHackeado);// O(logP)
 
+    }
+
+    public void actualizarSaldos(int usuario, int monto) {// O(logP)
+        int saldoAnterior = listaUsuarios[usuario - 1].getSaldo();
+        int nuevoSaldo = saldoAnterior + monto;
+        Usuario usuarioActualizado = listaUsuarios[usuario - 1];
+        usuarioActualizado.actualizarSaldo(nuevoSaldo);
+        heapUsuarios.actualizar(usuario - 1, usuarioActualizado); // O(log(P))
+        listaUsuarios[usuario - 1] = usuarioActualizado;
     }
 }
