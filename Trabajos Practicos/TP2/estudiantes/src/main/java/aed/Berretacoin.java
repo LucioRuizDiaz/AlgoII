@@ -44,7 +44,6 @@ public class Berretacoin {
             i++;
         }
         cadena.agregarAtras(heapTransacciones); // O(1)
-
     }
 
     public Transaccion txMayorValorUltimoBloque() { // O(1)
