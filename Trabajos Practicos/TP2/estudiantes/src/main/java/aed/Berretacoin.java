@@ -36,7 +36,6 @@ public class Berretacoin {
             if (comprador != 0) {
                 montoTotalUltimoBloque += monto;
                 cantidadTransacciones += 1;
-
                 actualizarSaldos(comprador, -monto); // O(log P)
             }
             // vendedor
