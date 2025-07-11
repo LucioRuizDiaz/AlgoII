@@ -10,8 +10,6 @@ public class Berretacoin {
     private heapArray<Transaccion> heapTransacciones;
     private int montoTotalUltimoBloque;
     private int cantidadTransacciones;
-    private ListaEnlazada<Integer> transaccionesValidas;
-    private Object[] nodosTransacciones; // Array de nodos para acceso O(1)
 
     public Berretacoin(int n_usuarios) { // O(P)
         this.cadena = new ListaEnlazada<heapArray<Transaccion>>();
@@ -22,19 +20,15 @@ public class Berretacoin {
             heapUsuarios.insertarHandle(i, usuario);
             listaUsuarios[i] = usuario;
         }
-        heapUsuarios.heapify();
     }
 
     public void agregarBloque(Transaccion[] transacciones) { // O(n * log(P))
         this.heapTransacciones = new heapArray<>(transacciones.length);
         this.montoTotalUltimoBloque = 0;
         this.cantidadTransacciones = 0;
-        this.transaccionesValidas = new ListaEnlazada<Integer>();
-        this.nodosTransacciones = new Object[transacciones.length];
-
         int i = 0;
         for (Transaccion tx : transacciones) { // O(n)
-            heapTransacciones.insertarHandle(i, tx); // O(log(n))
+            heapTransacciones.insertarHandle(i, tx);
             int comprador = tx.id_comprador();
             int vendedor = tx.id_vendedor();
             int monto = tx.monto();
@@ -46,13 +40,8 @@ public class Berretacoin {
             }
             // vendedor
             actualizarSaldos(vendedor, monto); // O(log P)
-
-            // lista enlazada de transacciones
-            nodosTransacciones[i] = transaccionesValidas.agregarAtrasConNodo(i);
             i++;
-
         }
-        heapTransacciones.heapify();
         cadena.agregarAtras(heapTransacciones); // O(1)
     }
 
@@ -62,28 +51,17 @@ public class Berretacoin {
 
     public Transaccion[] txUltimoBloque() { // O(n)
         heapArray<Transaccion> ultimo = cadena.ultimo();
-        Transaccion[] ultimaOrdenada = new Transaccion[transaccionesValidas.longitud()];
+        Transaccion[] ultimaOrdenada = new Transaccion[ultimo.cantidadElementos()];
         int[] handles = ultimo.devolverHandles();
 
-        /*
-         * if (ultimo.cantidadElementos() > 0) {// si el heap esta vacio deja el array
-         * vacio
-         * int j = 0;
-         * for (int i = 0; i < handles.length; i++) { // O(n)
-         * if (handles[i] != -1) {// solo entra si el handle es valido y
-         * ultimaOrdenada[j] = ultimo.obtener(handles[i]);
-         * j++;
-         * }
-         * }
-         * 
-         * }
-         */
-        int j = 0;
-        Iterador<Integer> iter = transaccionesValidas.iterador();
-        while (iter.haySiguiente()) {
-            int indice = iter.siguiente();
-            ultimaOrdenada[j] = ultimo.obtener(handles[indice]);
-            j++;
+        if (ultimo.cantidadElementos() > 0) {// si el heap esta vacio deja el array vacio
+            int j = 0;
+            for (int i = 0; i < handles.length; i++) { // O(n)
+                if (handles[i] != -1) {// solo entra si el handle es valido
+                    ultimaOrdenada[j] = ultimo.obtener(handles[i]);
+                    j++;
+                }
+            }
         }
         return ultimaOrdenada;
     }
@@ -104,13 +82,6 @@ public class Berretacoin {
         int compradorHackeado = txMaxima.id_comprador();
         int vendedorHackeado = txMaxima.id_vendedor();
         int montoHackeado = txMaxima.monto();
-        int idHackeado = txMaxima.ID();
-
-        if (nodosTransacciones[idHackeado] != null) {
-            ListaEnlazada<Integer>.Nodo nodoAEliminar = (ListaEnlazada<Integer>.Nodo) nodosTransacciones[idHackeado];
-            transaccionesValidas.eliminar(nodoAEliminar);
-            nodosTransacciones[idHackeado] = null;
-        }
 
         // devolverle la plata al comprador
         if (compradorHackeado != 0) {

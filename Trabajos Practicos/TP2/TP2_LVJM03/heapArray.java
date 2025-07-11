@@ -60,6 +60,7 @@ public class heapArray<T extends Comparable<T>> {
         heap[posicion] = nuevoValor;
         siftUpDesde(posicion);
         siftDownDesde(posicion);
+
     }
 
     public void insertarHandle(int id, T valor) {
@@ -67,17 +68,11 @@ public class heapArray<T extends Comparable<T>> {
         handles[id] = tamaño;
         ids[tamaño] = id;
         tamaño++;
+        siftUp();
     }
 
     public int[] devolverHandles() {
         return handles;
-    }
-
-    public void heapify() {
-        // agregamos el metodo heapify siguiendo el algoritmo de Floyd
-        for (int i = (tamaño / 2) - 1; i >= 0; i--) {
-            siftDownDesde(i);
-        }
     }
 
     public T eliminarMaximo() {
@@ -97,6 +92,7 @@ public class heapArray<T extends Comparable<T>> {
                 ids[tamaño] = -1;
                 handles[idMaximo] = -1;
                 siftDown();
+
             }
 
         }

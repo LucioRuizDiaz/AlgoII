@@ -3,17 +3,13 @@ package aed;
 public class ListaEnlazada<T> implements Secuencia<T> {
     private Nodo cabeza;
     private Nodo ultimo;
-    private int tamaño;
 
-    public class Nodo {
+    private class Nodo {
         T valor;
         Nodo siguiente;
-        Nodo anterior;
 
         Nodo(T v) {
             valor = v;
-            siguiente = null;
-            anterior = null;
         }
 
     }
@@ -21,11 +17,16 @@ public class ListaEnlazada<T> implements Secuencia<T> {
     public ListaEnlazada() {
         cabeza = null;
         ultimo = null;
-        tamaño = 0;
     }
 
     public int longitud() {
-        return tamaño;
+        Nodo i = cabeza;
+        int longitud = 0;
+        while (i != null) {
+            longitud += 1;
+            i = i.siguiente;
+        }
+        return longitud;
     }
 
     public void agregarAdelante(T elem) {
@@ -35,10 +36,8 @@ public class ListaEnlazada<T> implements Secuencia<T> {
             ultimo = nuevo;
         } else {
             nuevo.siguiente = cabeza;
-            cabeza.anterior = nuevo;
             cabeza = nuevo;
         }
-        tamaño++;
     }
 
     public void agregarAtras(T elem) {
@@ -46,27 +45,12 @@ public class ListaEnlazada<T> implements Secuencia<T> {
             agregarAdelante(elem);
         } else {
             Nodo nuevo = new Nodo(elem);
-            ultimo.siguiente = nuevo;
-            nuevo.anterior = ultimo;
+            Nodo actual = cabeza;
+            while (actual.siguiente != null) {
+                actual = actual.siguiente;
+            }
+            actual.siguiente = nuevo;
             ultimo = nuevo;
-            tamaño++;
-        }
-    }
-
-    public Nodo agregarAtrasConNodo(T elem) {
-        if (cabeza == null) {
-            Nodo nuevo = new Nodo(elem);
-            cabeza = nuevo;
-            ultimo = nuevo;
-            tamaño++;
-            return nuevo;
-        } else {
-            Nodo nuevo = new Nodo(elem);
-            ultimo.siguiente = nuevo;
-            nuevo.anterior = ultimo;
-            ultimo = nuevo;
-            tamaño++;
-            return nuevo;
         }
     }
 
@@ -79,29 +63,17 @@ public class ListaEnlazada<T> implements Secuencia<T> {
     }
 
     public void eliminar(int i) {
-        if (i < 0 || i >= tamaño)
-            return;
         Nodo actual = cabeza;
+        Nodo previo = cabeza;
         for (int j = 0; j < i; j++) {
+            previo = actual;
             actual = actual.siguiente;
         }
-        eliminar(actual);
-    }
-
-    public void eliminar(Nodo nodo) {
-        if (nodo == null)
-            return;
-        if (nodo.anterior != null) {
-            nodo.anterior.siguiente = nodo.siguiente;
+        if (i == 0) {
+            cabeza = actual.siguiente;
         } else {
-            cabeza = nodo.siguiente;
+            previo.siguiente = actual.siguiente;
         }
-        if (nodo.siguiente != null) {
-            nodo.siguiente.anterior = nodo.anterior;
-        } else {
-            ultimo = nodo.anterior;
-        }
-        tamaño--;
     }
 
     public void modificarPosicion(int indice, T elem) {
